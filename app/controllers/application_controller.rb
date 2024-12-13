@@ -1,55 +1,17 @@
-module Api
-    module V1
-      class TasksController < ApplicationController
-        before_action :set_task, only: [:show, :update, :destroy]
-  
-        # GET /api/v1/tasks
-        def index
-          tasks = Task.all
-          render json: tasks
-        end
-  
-        # GET /api/v1/tasks/:id
-        def show
-          render json: @task
-        end
-  
-        # POST /api/v1/tasks
-        def create
-          task = Task.new(task_params)
-          if task.save
-            render json: task, status: :created
-          else
-            render json: { error: task.errors.full_messages }, status: :unprocessable_entity
-          end
-        end
-  
-        # PUT /api/v1/tasks/:id
-        def update
-          if @task.update(task_params)
-            render json: @task
-          else
-            render json: { error: @task.errors.full_messages }, status: :unprocessable_entity
-          end
-        end
-  
-        # DELETE /api/v1/tasks/:id
-        def destroy
-          @task.destroy
-          head :no_content
-        end
-  
-        private
-  
-        def set_task
-          @task = Task.find(params[:id])
-        rescue ActiveRecord::RecordNotFound
-          render json: { error: "Task not found" }, status: :not_found
-        end
-  
-        def task_params
-          params.require(:task).permit(:title, :completed)
-        end
-      end
-    end
-  end  
+class ApplicationController < ActionController::API
+  # Handles common exceptions like record not found or parameter errors
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  rescue_from ActionController::ParameterMissing, with: :parameter_missing
+
+  private
+
+  # Handles ActiveRecord::RecordNotFound exceptions
+  def record_not_found
+    render json: { error: "Record not found" }, status: :not_found
+  end
+
+  # Handles ActionController::ParameterMissing exceptions
+  def parameter_missing(exception)
+    render json: { error: exception.message }, status: :unprocessable_entity
+  end
+end
