@@ -47,3 +47,7 @@ group :development, :test do
 end
 
 
+
+gem "kaminari", "~> 1.2"
+
+gem "rack-attack", "~> 6.7"
