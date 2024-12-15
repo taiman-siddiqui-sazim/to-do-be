@@ -46,10 +46,7 @@ module Api
       end
 
       def build_metadata(extra_metadata = {})
-        {
-          timestamp: Time.current,
-          api_version: "v1"
-        }.merge(extra_metadata)
+        metadata.merge(extra_metadata)
       end
     end
   end
