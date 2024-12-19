@@ -1,7 +1,7 @@
 module Api
   module V1
     class TasksController < ApplicationController
-      before_action :set_task, only: [:show, :update]
+      before_action :set_task, only: [:show, :update, :update_completion]
 
       def index
         result = PaginationService.paginate(Task, params)
@@ -58,7 +58,39 @@ module Api
             metadata: metadata
           ), status: :unprocessable_entity
         end
-      end      
+      end 
+      
+      def update_completion
+        if params[:task].keys != ['completed']
+          render json: TaskSerializer.serialize_errors(
+            ['Only the completed field can be updated'],
+            metadata: metadata
+          ), status: :unprocessable_entity
+          return
+        end
+
+        completed_value = params[:task][:completed]
+        unless [true, false].include?(completed_value)
+          render json: TaskSerializer.serialize_errors(
+            ['Completed must be true or false'],
+            metadata: metadata
+          ), status: :unprocessable_entity
+          return
+        end
+
+        @task.completed = completed_value
+        if @task.save
+          render json: TaskSerializer.serialize(
+            @task,
+            metadata: metadata
+          ), status: :ok
+        else
+          render json: TaskSerializer.serialize_errors(
+            @task.errors.full_messages,
+            metadata: metadata
+          ), status: :unprocessable_entity
+        end
+      end
 
       private
 
