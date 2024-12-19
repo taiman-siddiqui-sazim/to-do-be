@@ -1,7 +1,7 @@
 module Api
   module V1
     class TasksController < ApplicationController
-      before_action :set_task, only: [:show, :update, :update_completion]
+      before_action :set_task, only: [:show, :update, :update_completion, :destroy]
 
       def index
         result = PaginationService.paginate(Task, params)
@@ -84,6 +84,17 @@ module Api
             @task,
             metadata: metadata
           ), status: :ok
+        else
+          render json: TaskSerializer.serialize_errors(
+            @task.errors.full_messages,
+            metadata: metadata
+          ), status: :unprocessable_entity
+        end
+      end
+
+      def destroy
+        if @task.destroy
+          render json: { message: "Task successfully deleted", metadata: metadata }, status: :ok
         else
           render json: TaskSerializer.serialize_errors(
             @task.errors.full_messages,
