@@ -15,7 +15,7 @@ class TaskValidator
   private
 
   def validate_title
-    if @task.title.blank? || !@task.title.is_a?(String) || @task.title.strip.empty?
+    if @task.title.blank? || !@task.title.is_a?(String)
       @errors << "Title must be a non-empty string"
     end
   end
