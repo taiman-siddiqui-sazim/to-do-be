@@ -17,7 +17,11 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
     allow do
+<<<<<<< HEAD
       origins 'http://localhost:3000' 
+=======
+      origins 'http://localhost:3000' # Update this to match your frontend URL
+>>>>>>> TD-15-task-complete
       resource '*',
         headers: :any,
         methods: [:get, :post, :put, :patch, :delete, :options, :head]
