@@ -2,6 +2,7 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
+<<<<<<< HEAD
   username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
   host: <%= ENV['DATABASE_HOST'] %>
@@ -17,6 +18,23 @@ test:
 production:
   <<: *default
   database: <%= ENV['DATABASE_PRODUCTION'] || 'to_do_prod' %>
+=======
+  username: taiman
+  password: banani123
+  host: localhost
+
+development:
+  <<: *default
+  database: to_do_dev
+
+test:
+  <<: *default
+  database: to_do_test
+
+production:
+  <<: *default
+  database: to_do_prod
+>>>>>>> TD-15-task-complete
   username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
   host: <%= ENV['DATABASE_HOST'] %>
